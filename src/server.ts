@@ -1,6 +1,5 @@
 import express, { Request, Response } from "express";
 import morgan from "morgan";
-import cors from "cors";
 import session from "express-session";
 import connectPgSimple from "connect-pg-simple";
 import rateLimit from "express-rate-limit";
@@ -10,12 +9,13 @@ import { authRouter } from "./routes/authRouter.routes";
 import { isAuthenticated } from "./middleware/authMiddleware";
 import { notesRouter } from "./routes/notes.routes";
 import { pool } from "./config/db";
+import { corsConfig } from "./config/corsConfig";
 
 
 const app = express();
 
 dotenv.config(); 
-app.use(cors());    
+app.use(corsConfig)
 app.use(express.json());
 
 const PgStore = connectPgSimple(session);
@@ -42,7 +42,7 @@ app.use(
 
 const authLimiter = rateLimit({
   windowMs: 5 * 60 * 1000,
-  max: 10,
+  max: 1000,
 });
 //notes for me: allow 50 requests per minute 
 const globalLimiter = rateLimit({

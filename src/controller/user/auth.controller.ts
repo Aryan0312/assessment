@@ -62,12 +62,16 @@ export const loginUser =  asyncHandler(async(req: Request, res: Response) => {
   }
 
   req.session.userId = user.id;
+  req.session.name = user.name;
+  req.session.email = user.email;
 
-  res.json({ message: "Login succesfully" });
+
+
+  res.status(200).json({ message: "Login succesfully" });
 });
 
 export const logoutUser = (req: Request, res: Response) => {
   req.session.destroy(() => {
-    res.json({ message: "Logged out" });
+    res.status(200).json({ message: "Logged out" });
   });
 };
