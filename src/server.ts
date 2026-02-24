@@ -1,4 +1,5 @@
 import express, { Request, Response } from "express";
+import path from "path";
 import morgan from "morgan";
 import session from "express-session";
 import connectPgSimple from "connect-pg-simple";
@@ -14,7 +15,7 @@ import { corsConfig } from "./config/corsConfig";
 
 const app = express();
 
-dotenv.config(); 
+dotenv.config();
 app.use(corsConfig)
 app.use(express.json());
 
@@ -46,8 +47,8 @@ const authLimiter = rateLimit({
 });
 //notes for me: allow 50 requests per minute 
 const globalLimiter = rateLimit({
-  windowMs:  60 * 1000, 
-  max: 50,
+  windowMs: 60 * 1000,
+  max: 500,
   standardHeaders: true,
   legacyHeaders: false,
 });
@@ -56,12 +57,18 @@ app.use(globalLimiter);
 app.use(morgan("dev"));
 
 
-app.use("/api/auth",authLimiter,authRouter);
-app.use("/api/note",notesRouter);
+app.use("/api/auth", authLimiter, authRouter);
+app.use("/api/note", notesRouter);
 app.get("/api", isAuthenticated, (_req: Request, res: Response) => {
   res.status(200).json({
     success: true
   });
+});
+
+app.use(express.static(path.join(__dirname, "../frontend/notes-app/dist")));
+
+app.get("/{*path}", (_req: Request, res: Response) => {
+  res.sendFile(path.join(__dirname, "../frontend/notes-app/dist/index.html"));
 });
 
 app.use(errorMiddleware);

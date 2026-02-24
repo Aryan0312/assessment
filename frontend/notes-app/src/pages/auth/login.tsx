@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { useAuth } from "@/context/AuthContext"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -17,6 +18,7 @@ type Props = {
 
 export default function Login({ onSuccess }: Props) {
   const navigate = useNavigate()
+  const { refreshUser } = useAuth()
 
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -45,7 +47,8 @@ export default function Login({ onSuccess }: Props) {
         throw new Error(data.message || "Login failed")
       }
 
-      // Close modal if exists
+      await refreshUser() // DEBUG NOTE: this fetches /me to update AuthContext after login
+
       if (onSuccess) onSuccess()
 
       navigate("/dashboard")

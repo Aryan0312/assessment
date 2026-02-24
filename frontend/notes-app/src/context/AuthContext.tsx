@@ -33,7 +33,9 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
       if (!res.ok) throw new Error()
 
       const data = await res.json()
-      setUser(data)
+      console.log('[DEBUG AuthContext] /me raw response:', JSON.stringify(data)) // DEBUG - REMOVE LATER
+      console.log('[DEBUG AuthContext] data.data:', JSON.stringify(data.data)) // DEBUG - REMOVE LATER
+      setUser(data.data)
     } catch {
       setUser(null)
     } finally {

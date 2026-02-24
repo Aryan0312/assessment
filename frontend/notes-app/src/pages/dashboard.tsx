@@ -95,7 +95,10 @@ export default function Dashboard() {
           setUnauthorized(true)
           return
         }
-        setUser(await res.json())
+        const json = await res.json()
+        console.log('[DEBUG Dashboard] /me raw response:', JSON.stringify(json)) // DEBUG - REMOVE LATER
+        console.log('[DEBUG Dashboard] json.data:', JSON.stringify(json.data)) // DEBUG - REMOVE LATER
+        setUser(json.data)
       } catch {
         setUnauthorized(true)
       } finally {
