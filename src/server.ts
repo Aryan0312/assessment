@@ -36,7 +36,7 @@ app.use(
     cookie: {
       secure: false,
       httpOnly: true,
-      maxAge: 1000 * 60 * 60 * 24,
+      maxAge: 1000 * 60 * 60 * 24 * 7,
     },
   })
 );
@@ -45,7 +45,6 @@ const authLimiter = rateLimit({
   windowMs: 5 * 60 * 1000,
   max: 1000,
 });
-//notes for me: allow 50 requests per minute 
 const globalLimiter = rateLimit({
   windowMs: 60 * 1000,
   max: 500,
